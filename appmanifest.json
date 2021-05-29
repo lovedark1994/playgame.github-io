@@ -1,0 +1,17 @@
+{
+	"name": "金字塔冒險",
+	"short_name": "金字塔冒險",
+	"description": "",
+	"start_url": "index.html",
+	"display": "fullscreen",
+	"orientation": "portrait",
+	"background_color": "#ffffff",
+	"icons": [
+		{
+			"src": "icons/菜單-4.png",
+			"sizes": "2479x4271",
+			"type": "image/png",
+			"purpose": "maskable"
+		}
+	]
+}
