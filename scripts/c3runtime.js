@@ -5292,6 +5292,7 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 		C3.Plugins.Sprite.Acts.SetSize,
 		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.Touch.Cnds.IsTouchingObject,
+		C3.Plugins.Sprite.Cnds.IsOverlapping,
 		C3.Behaviors.DragnDrop.Acts.SetEnabled,
 		C3.Plugins.System.Cnds.Else,
 		C3.Plugins.Sprite.Cnds.OnCollision,
@@ -5300,7 +5301,10 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.Text.Acts.SetVisible,
 		C3.Plugins.Sprite.Acts.Destroy,
-		C3.Plugins.TextBox.Cnds.CompareText
+		C3.Plugins.System.Acts.SetBoolVar,
+		C3.Plugins.System.Cnds.CompareBoolVar,
+		C3.Plugins.TextBox.Cnds.CompareText,
+		C3.Plugins.Audio.Acts.Preload
 		];
 	};
 	self.C3_JsPropNameTable = [
@@ -5326,7 +5330,7 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 		{Sprite5: 0},
 		{移动到: 0},
 		{Sprite6: 0},
-		{Sprite7: 0},
+		{道具欄: 0},
 		{SpriteFont: 0},
 		{平铺背景: 0},
 		{"9patch3": 0},
@@ -5369,7 +5373,8 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 		{跳關: 0},
 		{count1: 0},
 		{count3: 0},
-		{count2: 0}
+		{count2: 0},
+		{輪盤準備囉: 0}
 	];
 }
 
