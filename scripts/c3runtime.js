@@ -5537,6 +5537,7 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 			const v0 = p._GetNode(0).GetVar();
 			return () => v0.GetValue();
 		},
+		() => -15,
 		() => "楊道昀",
 		() => "序號錯誤"
 	];
