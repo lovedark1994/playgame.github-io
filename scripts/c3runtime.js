@@ -5538,7 +5538,6 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 			return () => v0.GetValue();
 		},
 		() => "楊道昀",
-		() => -15,
 		() => "序號錯誤"
 	];
 }
