@@ -5219,6 +5219,30 @@ inst._targetY]}getGridTargetPosition(){const inst=map.get(this);return[inst._tar
 'use strict';{const C3=self.C3;C3.Behaviors.TileMovement.Exps={GridX(){const wi=this.GetWorldInfo();return this._GridX(wi.GetX(),wi.GetY())},GridY(){const wi=this.GetWorldInfo();return this._GridY(wi.GetX(),wi.GetY())},SpeedX(){return this._speedX},SpeedY(){return this._speedY},TargetX(){return this._targetX},TargetY(){return this._targetY},GridTargetX(){return this._targetGridX},GridTargetY(){return this._targetGridY}}};
 
 
+'use strict';{const C3=self.C3;C3.Behaviors.Fade=class FadeBehavior extends C3.SDKBehaviorBase{constructor(opts){super(opts)}Release(){super.Release()}}};
+
+
+'use strict';{const C3=self.C3;C3.Behaviors.Fade.Type=class FadeType extends C3.SDKBehaviorTypeBase{constructor(behaviorType){super(behaviorType)}Release(){super.Release()}OnCreate(){}}};
+
+
+'use strict';{const C3=self.C3;const FADE_IN_TIME=0;const WAIT_TIME=1;const FADE_OUT_TIME=2;const DESTROY=3;const ACTIVE_AT_START=4;C3.Behaviors.Fade.Instance=class FadeInstance extends C3.SDKBehaviorInstanceBase{constructor(behInst,properties){super(behInst);this._fadeInTime=0;this._waitTime=0;this._fadeOutTime=0;this._destroy=true;this._activeAtStart=true;this._setMaxOpacity=false;this._stage=0;this._stageTime=C3.New(C3.KahanSum);this._maxOpacity=this._inst.GetWorldInfo().GetOpacity()||1;if(properties){this._fadeInTime=
+properties[FADE_IN_TIME];this._waitTime=properties[WAIT_TIME];this._fadeOutTime=properties[FADE_OUT_TIME];this._destroy=!!properties[DESTROY];this._activeAtStart=!!properties[ACTIVE_AT_START];this._stage=this._activeAtStart?0:3}if(this._activeAtStart)if(this._fadeInTime===0){this._stage=1;if(this._waitTime===0)this._stage=2}else{this._inst.GetWorldInfo().SetOpacity(0);this._runtime.UpdateRender()}this._StartTicking()}Release(){super.Release()}SaveToJson(){return{"fit":this._fadeInTime,"wt":this._waitTime,
+"fot":this._fadeOutTime,"d":this._destroy,"s":this._stage,"st":this._stageTime.Get(),"mo":this._maxOpacity}}LoadFromJson(o){this._fadeInTime=o["fit"];this._waitTime=o["wt"];this._fadeOutTime=o["fot"];this._destroy=o["d"];this._stage=o["s"];this._stageTime.Set(o["st"]);this._maxOpacity=o["mo"]}Tick(){const dt=this._runtime.GetDt(this._inst);this._stageTime.Add(dt);const wi=this._inst.GetWorldInfo();if(this._stage===0){wi.SetOpacity(this._stageTime.Get()/this._fadeInTime*this._maxOpacity);this._runtime.UpdateRender();
+if(wi.GetOpacity()>=this._maxOpacity){wi.SetOpacity(this._maxOpacity);this._stage=1;this._stageTime.Reset();this.Trigger(C3.Behaviors.Fade.Cnds.OnFadeInEnd)}}if(this._stage===1)if(this._stageTime.Get()>=this._waitTime){this._stage=2;this._stageTime.Reset();this.Trigger(C3.Behaviors.Fade.Cnds.OnWaitEnd)}if(this._stage===2)if(this._fadeOutTime!==0){wi.SetOpacity(this._maxOpacity-this._stageTime.Get()/this._fadeOutTime*this._maxOpacity);this._runtime.UpdateRender();if(wi.GetOpacity()<=0){this._stage=
+3;this._stageTime.Reset();this.Trigger(C3.Behaviors.Fade.Cnds.OnFadeOutEnd);if(this._destroy)this._runtime.DestroyInstance(this._inst)}}}Start(){this._stage=0;this._stageTime.Reset();if(this._fadeInTime===0){this._stage=1;if(this._waitTime===0)this._stage=2}else{this._inst.GetWorldInfo().SetOpacity(0);this._runtime.UpdateRender()}}GetPropertyValueByIndex(index){switch(index){case FADE_IN_TIME:return this._fadeInTime;case WAIT_TIME:return this._waitTime;case FADE_OUT_TIME:return this._fadeOutTime;
+case DESTROY:return this._destroy}}SetPropertyValueByIndex(index,value){switch(index){case FADE_IN_TIME:this._fadeInTime=value;break;case WAIT_TIME:this._waitTime=value;break;case FADE_OUT_TIME:this._fadeOutTime=value;break;case DESTROY:this._destroy=!!value;break}}GetDebuggerProperties(){const prefix="behaviors.fade";return[{title:"$"+this.GetBehaviorType().GetName(),properties:[{name:prefix+".properties.fade-in-time.name",value:this._fadeInTime,onedit:v=>this._fadeInTime=v},{name:prefix+".properties.wait-time.name",
+value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-out-time.name",value:this._fadeOutTime,onedit:v=>this._fadeOutTime=v},{name:prefix+".debugger.stage",value:[prefix+".debugger."+["fade-in","wait","fade-out","done"][this._stage]]}]}]}}};
+
+
+'use strict';{const C3=self.C3;C3.Behaviors.Fade.Cnds={OnFadeOutEnd(){return true},OnFadeInEnd(){return true},OnWaitEnd(){return true}}};
+
+
+'use strict';{const C3=self.C3;C3.Behaviors.Fade.Acts={StartFade(){if(!this._activeAtStart&&!this._setMaxOpacity){this._maxOpacity=this._inst.GetWorldInfo().GetOpacity()||1;this._setMaxOpacity=true}if(this._stage===3)this.Start()},RestartFade(){this.Start()},SetFadeInTime(t){if(t<0)t=0;this._fadeInTime=t},SetWaitTime(t){if(t<0)t=0;this._waitTime=t},SetFadeOutTime(t){if(t<0)t=0;this._fadeOutTime=t}}};
+
+
+'use strict';{const C3=self.C3;C3.Behaviors.Fade.Exps={FadeInTime(){return this._fadeInTime},WaitTime(){return this._waitTime},FadeOutTime(){return this._fadeOutTime}}};
+
+
 
 {
 	const C3 = self.C3;
@@ -5240,36 +5264,44 @@ inst._targetY]}getGridTargetPosition(){const inst=map.get(this);return[inst._tar
 		C3.Behaviors.TileMovement,
 		C3.Plugins.TextBox,
 		C3.Plugins.Button,
+		C3.Behaviors.Fade,
 		C3.Plugins.System.Cnds.EveryTick,
 		C3.Plugins.Sprite.Acts.SetAngle,
 		C3.Plugins.Sprite.Exps.Y,
+		C3.Plugins.System.Cnds.OnLayoutStart,
+		C3.Plugins.Sprite.Acts.SetY,
 		C3.Plugins.System.Cnds.IsGroupActive,
 		C3.Plugins.Sprite.Cnds.CompareY,
+		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Plugins.Text.Acts.SetText,
+		C3.Plugins.Text.Acts.SetFontSize,
+		C3.Plugins.Audio.Acts.Play,
+		C3.Plugins.System.Acts.Wait,
 		C3.Plugins.System.Acts.GoToLayout,
+		C3.Plugins.Touch.Cnds.OnTouchObject,
+		C3.Plugins.System.Cnds.Every,
+		C3.Plugins.System.Acts.AddVar,
 		C3.Plugins.System.Acts.Scroll,
 		C3.Plugins.Sprite.Exps.X,
 		C3.Plugins.System.Cnds.CompareVar,
 		C3.Plugins.Sprite.Acts.SetAnim,
-		C3.Plugins.Touch.Cnds.OnTouchObject,
-		C3.Plugins.System.Acts.AddVar,
-		C3.Plugins.Audio.Acts.Play,
 		C3.Plugins.System.Acts.SetVar,
 		C3.Behaviors.MoveTo.Acts.MoveToPosition,
-		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
+		C3.Plugins.Button.Cnds.OnClicked,
 		C3.Plugins.Sprite.Cnds.IsBoolInstanceVarSet,
 		C3.Plugins.Sprite.Acts.SetSize,
-		C3.Plugins.System.Acts.Wait,
+		C3.Plugins.Sprite.Acts.SetBoolInstanceVar,
 		C3.Plugins.Touch.Cnds.IsTouchingObject,
 		C3.Behaviors.DragnDrop.Acts.SetEnabled,
 		C3.Plugins.System.Cnds.Else,
 		C3.Plugins.Sprite.Cnds.OnCollision,
-		C3.Plugins.Sprite.Acts.SetVisible,
 		C3.Behaviors.Flash.Acts.Flash,
 		C3.Plugins.System.Acts.WaitForPreviousActions,
 		C3.Behaviors.MoveTo.Acts.SetEnabled,
 		C3.Plugins.Sprite.Acts.ToggleBoolInstanceVar,
-		C3.Plugins.Button.Cnds.OnClicked,
+		C3.Plugins.System.Cnds.TriggerOnce,
+		C3.Plugins.Text.Acts.SetVisible,
+		C3.Plugins.Sprite.Acts.Destroy,
 		C3.Plugins.TextBox.Cnds.CompareText
 		];
 	};
@@ -5320,13 +5352,21 @@ inst._targetY]}getGridTargetPosition(){const inst=map.get(this);return[inst._tar
 		{三眼盤: 0},
 		{Sprite: 0},
 		{DEBUG: 0},
-		{"9patch4": 0},
 		{蔡眼二: 0},
 		{蔡眼一: 0},
 		{文字输入: 0},
 		{菜單字: 0},
 		{按钮: 0},
 		{Sprite2: 0},
+		{Sprite3: 0},
+		{合體提示: 0},
+		{淡入淡出: 0},
+		{Sprite12: 0},
+		{Text: 0},
+		{Sprite13: 0},
+		{Sprite14: 0},
+		{按钮2: 0},
+		{遊戲時間: 0},
 		{count1: 0},
 		{count3: 0},
 		{count2: 0}
@@ -5435,21 +5475,30 @@ inst._targetY]}getGridTargetPosition(){const inst=map.get(this);return[inst._tar
 			const n0 = p._GetNode(0);
 			return () => ((n0.ExpObject() - 750) * 2);
 		},
+		() => 660,
+		() => 750,
+		() => 705,
 		() => "分组1",
 		() => 710,
 		() => 700,
-		() => 575,
-		() => 565,
+		() => 665,
+		() => 655,
+		() => "開啟石門",
+		() => 30,
 		() => "通關",
+		() => 600,
+		() => 0,
+		() => "",
+		() => 2,
+		() => 10,
+		() => 0.5,
+		() => 1,
 		p => {
 			const n0 = p._GetNode(0);
 			return () => n0.ExpObject();
 		},
-		() => 0,
 		() => "Animation 1",
-		() => 1,
 		() => "Animation 2",
-		() => 2,
 		() => "Animation 3",
 		() => 3,
 		() => "Animation 4",
@@ -5458,21 +5507,35 @@ inst._targetY]}getGridTargetPosition(){const inst=map.get(this);return[inst._tar
 		() => 5,
 		() => "Animation 6",
 		() => "按鈕們",
-		() => "",
 		() => 6,
-		() => 696,
+		() => "打開寶箱",
+		() => 720,
 		() => 421,
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => (and("遊戲時間", v0.GetValue()) + "秒");
+		},
 		() => "需要鏟子",
 		() => 105,
 		() => 175,
 		() => "獲得鏟子頭",
 		() => 89,
 		() => 83,
+		() => 1.5,
 		() => 240,
-		() => "獲得棒子",
+		() => "獲得棍子",
 		() => "獲得鏟子",
 		() => 0.1,
-		() => "1234"
+		() => "將鏟子拖曳到土堆",
+		() => "挖到輪盤",
+		() => "點擊輪盤",
+		p => {
+			const v0 = p._GetNode(0).GetVar();
+			return () => v0.GetValue();
+		},
+		() => "楊道昀",
+		() => "序號錯誤",
+		() => -15
 	];
 }
 

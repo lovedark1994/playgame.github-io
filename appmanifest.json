@@ -8,10 +8,9 @@
 	"background_color": "#ffffff",
 	"icons": [
 		{
-			"src": "icons/菜單-4.png",
-			"sizes": "2479x4271",
-			"type": "image/png",
-			"purpose": "maskable"
+			"src": "icons/菜單素材-3.png",
+			"sizes": "596x491",
+			"type": "image/png"
 		}
 	]
 }
