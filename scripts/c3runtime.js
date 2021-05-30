@@ -5296,9 +5296,7 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 		C3.Plugins.System.Cnds.Else,
 		C3.Plugins.Sprite.Cnds.OnCollision,
 		C3.Behaviors.Flash.Acts.Flash,
-		C3.Plugins.System.Acts.WaitForPreviousActions,
 		C3.Behaviors.MoveTo.Acts.SetEnabled,
-		C3.Plugins.Sprite.Acts.ToggleBoolInstanceVar,
 		C3.Plugins.System.Cnds.TriggerOnce,
 		C3.Plugins.Text.Acts.SetVisible,
 		C3.Plugins.Sprite.Acts.Destroy,
@@ -5345,6 +5343,7 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 		{网格移动: 0},
 		{Sprite10: 0},
 		{合體: 0},
+		{輪盤準備: 0},
 		{Sprite11: 0},
 		{一眼盤: 0},
 		{三眼: 0},
@@ -5367,6 +5366,7 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 		{Sprite14: 0},
 		{按钮2: 0},
 		{遊戲時間: 0},
+		{跳關: 0},
 		{count1: 0},
 		{count3: 0},
 		{count2: 0}
@@ -5521,7 +5521,6 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 		() => "獲得鏟子頭",
 		() => 89,
 		() => 83,
-		() => 1.5,
 		() => 240,
 		() => "獲得棍子",
 		() => "獲得鏟子",
@@ -5534,8 +5533,8 @@ value:this._waitTime,onedit:v=>this._waitTime=v},{name:prefix+".properties.fade-
 			return () => v0.GetValue();
 		},
 		() => "楊道昀",
-		() => "序號錯誤",
-		() => -15
+		() => -15,
+		() => "序號錯誤"
 	];
 }
 
